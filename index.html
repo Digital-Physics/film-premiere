@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Premiere Countdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #000000, #8B0000 50%, #8B0000); /* Black to Red carpet gradient */
+            position: relative;
+            color: white;
+            overflow: hidden;
+        }
+
+        .countdown-wrapper {
+            font-size: 2em;
+            margin-bottom: 20px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .video-wrapper {
+            display: none; /* Initially hidden */
+            z-index: 2;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Spotlight effect using pseudo-elements */
+        .spotlight {
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.3), rgba(255,255,255,0) 70%);
+            transform-origin: top;
+            z-index: 1;
+            animation: move-spotlight 5s ease-in-out infinite;
+        }
+
+        .spotlight.left {
+            left: -50px;
+            animation: move-left-spotlight 6s ease-in-out infinite;
+        }
+
+        .spotlight.right {
+            right: -50px;
+            animation: move-right-spotlight 6s ease-in-out infinite;
+        }
+
+        /* Red carpet effect at the bottom */
+        .carpet {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background-color: #8B0000; /* Dark red carpet color */
+        }
+
+        /* Keyframes for spotlight animation */
+        @keyframes move-left-spotlight {
+            0% { transform: rotate(-30deg); left: -100px; }
+            50% { transform: rotate(0deg); left: 50%; }
+            100% { transform: rotate(-30deg); left: -100px; }
+        }
+
+        @keyframes move-right-spotlight {
+            0% { transform: rotate(30deg); right: -100px; }
+            50% { transform: rotate(0deg); right: 50%; }
+            100% { transform: rotate(30deg); right: -100px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="spotlight left"></div>
+    <div class="spotlight right"></div>
+    <h1>"Yellowstone" Film Premiere</h1>
+    <div class="countdown-wrapper">
+        <p id="countdown">Loading...</p>
+    </div>
+
+    <div class="video-wrapper" id="video">
+        <iframe src="https://player.vimeo.com/video/1020379427?h=7bac1a701d&amp;badge=0&amp;title=0&amp;portrait=0&amp;byline=0&amp;dnt=1&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
+            frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+            title="tutorial_placeholder">
+        </iframe>
+    </div>
+
+    <div class="carpet"></div>
+
+    <script>
+        var premiereDate = new Date("October 17, 2024 15:00:00 EST").getTime();
+
+        // Update the countdown every second
+        var countdownInterval = setInterval(function() {
+            var now = new Date().getTime();
+            var timeLeft = premiereDate - now;
+
+            if (timeLeft > 0) {
+                // Calculate time left (days, hours, minutes, seconds)
+                var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // Display the countdown
+                document.getElementById("countdown").innerHTML = 
+                    days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+            } else {
+                // When the countdown is finished, display the video
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").style.display = "none";
+                document.getElementById("video").style.display = "block";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
