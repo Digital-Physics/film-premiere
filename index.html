@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Film Premiere Countdown</title>
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Ensure no scrolling on both html and body */
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -15,7 +22,6 @@
             background-size: cover;
             color: white;
             position: relative;
-            overflow: hidden;
         }
 
         .countdown-wrapper {
@@ -32,11 +38,10 @@
             position: relative;
         }
 
-        /* Responsive iframe */
         iframe {
             width: 100%;
-            max-width: 800px; /* Set a max-width so it's not too large on bigger screens */
-            aspect-ratio: 16 / 9; /* Maintain the 16:9 aspect ratio */
+            max-width: 800px;
+            aspect-ratio: 16 / 9;
             border: none;
         }
 
@@ -54,15 +59,16 @@
             transform-origin: top;
             z-index: 1;
             animation: move-spotlight 5s ease-in-out infinite;
+            pointer-events: none;
         }
 
         .spotlight.left {
-            left: -50px;
+            left: -150px; /* Keep spotlight completely off-screen */
             animation: move-left-spotlight 6s ease-in-out infinite;
         }
 
         .spotlight.right {
-            right: -50px;
+            right: -150px; /* Keep spotlight completely off-screen */
             animation: move-right-spotlight 6s ease-in-out infinite;
         }
 
@@ -78,15 +84,15 @@
 
         /* Keyframes for spotlight animation */
         @keyframes move-left-spotlight {
-            0% { transform: rotate(-30deg); left: -100px; }
-            50% { transform: rotate(0deg); left: 50%; }
-            100% { transform: rotate(-30deg); left: -100px; }
+            0% { transform: rotate(-30deg); left: -200px; }
+            50% { transform: rotate(0deg); left: 30%; } /* Keep within the viewport */
+            100% { transform: rotate(-30deg); left: -200px; }
         }
 
         @keyframes move-right-spotlight {
-            0% { transform: rotate(30deg); right: -100px; }
-            50% { transform: rotate(0deg); right: 50%; }
-            100% { transform: rotate(30deg); right: -100px; }
+            0% { transform: rotate(30deg); right: -200px; }
+            50% { transform: rotate(0deg); right: 30%; } /* Keep within the viewport */
+            100% { transform: rotate(30deg); right: -200px; }
         }
 
         /* Media queries for better mobile responsiveness */
@@ -106,7 +112,19 @@
             iframe {
                 width: 100%;
                 height: auto;
-                aspect-ratio: 16 / 9; /* Keep the video ratio intact on smaller screens */
+                aspect-ratio: 16 / 9;
+            }
+
+            .spotlight {
+                width: 50px; /* Reduce spotlight size for mobile */
+            }
+
+            .spotlight.left {
+                left: -100px; /* Adjust positioning for smaller screens */
+            }
+
+            .spotlight.right {
+                right: -100px; /* Adjust positioning for smaller screens */
             }
         }
     </style>
@@ -129,10 +147,8 @@
     <div class="carpet"></div>
 
     <script>
-        // Set the premiere date and time (9pm EST, 10/18/2024)
-        var premiereDate = new Date("October 17, 2024 17:03:00 EST").getTime();
+        var premiereDate = new Date("October 17, 2024 17:40:00 EST").getTime();
 
-        // Update the countdown every second
         var countdownInterval = setInterval(function() {
             var now = new Date().getTime();
             var timeLeft = premiereDate - now;
